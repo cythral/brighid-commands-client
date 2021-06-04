@@ -1,0 +1,50 @@
+{% template Client.Interface.Annotations %}
+[System.CodeDom.Compiler.GeneratedCode("NSwag", "{{ ToolchainVersion }}")]
+public partial interface I{{ Class }}{% if HasClientBaseInterface %} : {{ ClientBaseInterface }}{% endif %}
+{
+    {% template Client.Interface.Body %}
+
+#nullable enable
+    /// <summary>
+    /// Gets or sets the Bearer token to be sent with the request.  If set,
+    /// the client credentials will not be used to fetch or refresh the token.
+    /// If the given token expires, you must manually handle setting a new one.
+    /// </summary>
+    string? Token { set; }
+#nullable disable
+
+{% for operation in InterfaceOperations -%}
+{%   if GenerateOptionalParameters == false -%}
+    {% template Client.Method.Documentation %}
+    {% template Client.Method.Annotations %}
+    {{ operation.ResultType }} {{ operation.ActualOperationName }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.VariableName }}{% if GenerateOptionalParameters and parameter.IsOptional %} = null{% endif %}{% if parameter.IsLast == false %}, {% endif %}{% endfor %});
+
+{%   endif -%}
+{%   if GenerateSyncMethods -%}
+    {% template Client.Method.Documentation %}
+    {% template Client.Method.Annotations %}
+    {{ operation.SyncResultType }} {{ operation.ActualOperationName }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.VariableName }}{% if GenerateOptionalParameters and parameter.IsOptional %} = null{% endif %}{% if parameter.IsLast == false %}, {% endif %}{% endfor %});
+
+{%   endif -%}
+    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+    {% template Client.Method.Documentation %}
+    {% template Client.Method.Annotations %}
+    {{ operation.ResultType }} {{ operation.ActualOperationName }}({% for parameter in operation.Parameters %}{{ parameter.Type }} {{ parameter.VariableName }}{% if GenerateOptionalParameters and parameter.IsOptional %} = null{% endif %}, {% endfor %}System.Threading.CancellationToken cancellationToken{% if GenerateOptionalParameters %} = default(System.Threading.CancellationToken){% endif %});
+
+{% endfor -%}
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NSwag", "{{ ToolchainVersion }}")]
+public partial interface I{{ Class }}Factory{% if HasClientBaseInterface %} : {{ ClientBaseInterface }}{% endif %}
+{
+    /// <summary>
+    /// Creates a new <see iref="I{{ Class }}" /> instance.
+    /// </summary>
+    I{{ Class }} Create();
+
+    /// <summary>
+    /// Creates a new <see iref="I{{ Class }}" /> instance using the given <paramref name="token" />.
+    /// </summary>
+    /// <param name="token">Token to use in the client.</param>
+    I{{ Class }} Create(string token);
+}
