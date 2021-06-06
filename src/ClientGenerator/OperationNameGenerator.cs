@@ -7,6 +7,7 @@ using NSwag.CodeGeneration.OperationNameGenerators;
 
 namespace Brighid.Commands.ClientGenerator
 {
+    /// <inheritdoc />
     public class OperationNameGenerator : IOperationNameGenerator
     {
         /// <summary>Gets a value indicating whether the generator supports multiple client classes.</summary>

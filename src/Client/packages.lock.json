@@ -2,6 +2,19 @@
   "version": 1,
   "dependencies": {
     ".NETCoreApp,Version=v5.0": {
+      "Brighid.Identity.Client": {
+        "type": "Direct",
+        "requested": "[0.4.0-beta1, )",
+        "resolved": "0.4.0-beta1",
+        "contentHash": "4RrRTTFaQPDk9G9c5id7B0XaLhurMQDTbdUFi8VI49q6Ki+VJSnVv/CiF/1vVE5P2xD/ustRlbmvSRQFVNUIgA==",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "5.0.0",
+          "Microsoft.Extensions.DependencyInjection": "5.0.1",
+          "Microsoft.Extensions.Http": "5.0.0",
+          "Microsoft.Extensions.Options": "5.0.0",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "5.0.0"
+        }
+      },
       "Microsoft.CodeAnalysis.CSharp.CodeStyle": {
         "type": "Direct",
         "requested": "[3.9.0, )",
