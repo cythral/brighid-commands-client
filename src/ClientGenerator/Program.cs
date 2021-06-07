@@ -143,7 +143,10 @@ namespace Brighid.Commands.ClientGenerator
                 Parameter(List<AttributeListSyntax>(), TokenList(), ParseTypeName("Uri?"), Identifier("baseUri"), EqualsValueClause(Token(EqualsToken), ParseExpression("null"))),
             });
 
-            var methodName = $"UseBrighidCommands{implementationName.Replace("Client", string.Empty)}";
+            var clientName = implementationName.Replace("Client", string.Empty);
+            clientName = clientName == "Commands" ? string.Empty : clientName;
+
+            var methodName = $"UseBrighidCommands{clientName}";
             return MethodDeclaration(ParseTypeName("void"), methodName)
                 .WithModifiers(TokenList(Token(PublicKeyword), Token(StaticKeyword)))
                 .WithParameterList(ParameterList(parameters))
