@@ -21,6 +21,6 @@ namespace Brighid.Commands.Client.Parser
         /// <summary>
         /// Gets or sets the command options.
         /// </summary>
-        public Dictionary<string, object> Options { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, string> Options { get; set; } = new Dictionary<string, string>();
     }
 }
