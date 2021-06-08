@@ -68,11 +68,7 @@ namespace Brighid.Commands.ClientGenerator
                 throw new Exception("Template Directory should be defined.");
             }
 
-            var client = new HttpClient
-            {
-                DefaultRequestVersion = new Version(2, 0),
-            };
-
+            var client = new HttpClient();
             var swaggerString = await client.GetStringAsync("https://commands.brigh.id/swagger/v1/swagger.json");
             var document = await OpenApiDocument.FromJsonAsync(swaggerString);
             var settings = new CSharpClientGeneratorSettings
@@ -130,8 +126,8 @@ namespace Brighid.Commands.ClientGenerator
         {
             foreach (var interfaceName in interfaceNames)
             {
-                var implementationName = interfaceName[1..];
-                yield return GenerateUseMethod(interfaceName, implementationName);
+                var implementationName = interfaceName.Skip(1);
+                yield return GenerateUseMethod(interfaceName, string.Join(string.Empty, implementationName));
             }
         }
 

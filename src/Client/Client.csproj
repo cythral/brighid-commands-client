@@ -24,4 +24,8 @@
   <ItemGroup>
     <CompilerVisibleProperty Include="TemplateDirectory" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
 </Project>
