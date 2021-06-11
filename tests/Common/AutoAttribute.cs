@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -7,6 +8,8 @@ using System.Threading;
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using AutoFixture.NUnit3;
+
+using RichardSzalay.MockHttp;
 
 #pragma warning disable EF1001
 
@@ -21,6 +24,12 @@ internal class AutoAttribute : AutoDataAttribute
     {
         var fixture = new Fixture();
         fixture.Inject(new CancellationToken(false));
+
+        var mockHttpHandler = new MockHttpMessageHandler();
+        var httpClient = new HttpClient(mockHttpHandler) { BaseAddress = new("http://localhost/") };
+        fixture.Inject(mockHttpHandler);
+        fixture.Inject(httpClient);
+
         fixture.Customize(new AutoNSubstituteCustomization { ConfigureMembers = true });
         fixture.Customizations.Add(new OptionsRelay());
         fixture.Customizations.Add(new TypeOmitter<IDictionary<string, JsonElement>>());

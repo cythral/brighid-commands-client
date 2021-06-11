@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Brighid.Commands.Client.Parser
 {
     /// <inheritdoc />
-    internal partial class DefaultCommandParser : ICommandParser
+    internal class DefaultCommandParser : ICommandParser
     {
         private readonly ICommandsClient commandsClient;
 

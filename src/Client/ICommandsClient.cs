@@ -1,8 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using Brighid.Commands.Client.Parser;
-
 namespace Brighid.Commands.Client
 {
     /// <summary>
@@ -18,6 +16,6 @@ namespace Brighid.Commands.Client
         /// <param name="userId">ID of the user to impersonate.</param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The resulting command, or null if there was an error.</returns>
-        Task<Command?> ParseCommandAsUser(string message, string userId, CancellationToken cancellationToken);
+        Task<ExecuteCommandResponse?> ParseAndExecuteCommandAsUser(string message, string userId, CancellationToken cancellationToken);
     }
 }
