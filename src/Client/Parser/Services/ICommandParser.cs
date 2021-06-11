@@ -6,7 +6,7 @@ namespace Brighid.Commands.Client.Parser
     /// <summary>
     /// Parser that parses messages into commands.
     /// </summary>
-    internal partial interface ICommandParser
+    public interface ICommandParser
     {
         /// <summary>
         /// Tries to parse a gateway message into a command.
