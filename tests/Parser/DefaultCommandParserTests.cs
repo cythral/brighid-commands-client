@@ -80,13 +80,13 @@ namespace Brighid.Commands.Client.Parser
                 options.Prefix = '.';
                 options.ArgSeparator = ' ';
 
-                commandsClient.GetCommandParseInfo(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Throws(new ApiException(string.Empty, 404, string.Empty, null, null));
+                commandsClient.GetCommandParserRestrictions(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Throws(new ApiException(string.Empty, 404, string.Empty, null, null));
 
                 var message = ".echo Hello World";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result.Should().BeNull();
-                await commandsClient.Received().GetCommandParseInfo(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+                await commandsClient.Received().GetCommandParserRestrictions(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
             }
 
             [Test, Auto]
@@ -182,7 +182,7 @@ namespace Brighid.Commands.Client.Parser
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result.Should().BeNull();
-                await commandsClient.Received().GetCommandParseInfo(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+                await commandsClient.Received().GetCommandParserRestrictions(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
             }
 
             [Test, Auto]

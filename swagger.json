@@ -15,7 +15,7 @@
         "tags": [
           "Command"
         ],
-        "operationId": "Commands:GetCommandParseInfo",
+        "operationId": "Commands:GetCommandParserRestrictions",
         "parameters": [
           {
             "name": "name",
