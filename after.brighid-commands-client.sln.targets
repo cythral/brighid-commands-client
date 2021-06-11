@@ -27,6 +27,10 @@
         />
     </Target>
 
+    <Target Name="UpdateSwagger">
+        <MSBuild Projects="$(MSBuildThisFileDirectory)src/Client/Client.csproj" Targets="DownloadSwaggerDoc" Properties="SwaggerFileSourceUrl=$(SwaggerFileSourceUrl)" />
+    </Target>
+
     <Target Name="Format" DependsOnTargets="Restore;RestoreTools">
         <Exec Command="dotnet format $(MSBuildThisFileDirectory)brighid-commands-client.sln --fix-style info" />
     </Target>
