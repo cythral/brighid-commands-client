@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,8 +67,7 @@ namespace Brighid.Commands.ClientGenerator
                 throw new Exception("Template Directory should be defined.");
             }
 
-            var client = new HttpClient();
-            var swaggerString = await client.GetStringAsync("https://commands.brigh.id/swagger/v1/swagger.json");
+            var swaggerString = GetSwaggerFile(context);
             var document = await OpenApiDocument.FromJsonAsync(swaggerString);
             var settings = new CSharpClientGeneratorSettings
             {
@@ -129,6 +127,13 @@ namespace Brighid.Commands.ClientGenerator
                 var implementationName = interfaceName.Skip(1);
                 yield return GenerateUseMethod(interfaceName, string.Join(string.Empty, implementationName));
             }
+        }
+
+        private static string GetSwaggerFile(GeneratorExecutionContext context)
+        {
+            var swaggerFileQuery = from file in context.AdditionalFiles where file.Path.Contains("swagger.json") select file;
+            var swaggerFile = swaggerFileQuery.First();
+            return swaggerFile.GetText()!.ToString();
         }
 
         private static MemberDeclarationSyntax GenerateUseMethod(string interfaceName, string implementationName)
