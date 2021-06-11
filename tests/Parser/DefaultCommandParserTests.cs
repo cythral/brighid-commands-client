@@ -125,7 +125,7 @@ namespace Brighid.Commands.Client.Parser
             [Test, Auto]
             public async Task ShouldCombineArgumentsIntoTheLastArgIfArgLimitIsReached(
                 CommandParserOptions options,
-                [Frozen] CommandParseInfo parserRestrictions,
+                [Frozen] CommandParserRestrictions parserRestrictions,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
             )
@@ -144,7 +144,7 @@ namespace Brighid.Commands.Client.Parser
             [Test, Auto]
             public async Task ShouldParseOptions(
                 CommandParserOptions options,
-                [Frozen] CommandParseInfo parserRestrictions,
+                [Frozen] CommandParserRestrictions parserRestrictions,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
             )
@@ -167,7 +167,7 @@ namespace Brighid.Commands.Client.Parser
             [Test, Auto]
             public async Task ShouldReturnNullWhenOptionIsNotValid(
                 CommandParserOptions options,
-                [Frozen] CommandParseInfo parserRestrictions,
+                [Frozen] CommandParserRestrictions parserRestrictions,
                 [Frozen, Substitute] ICommandsClient commandsClient,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
@@ -188,7 +188,7 @@ namespace Brighid.Commands.Client.Parser
             [Test, Auto]
             public async Task ShouldReturnNullIfArgumentsExceedMaxArgsAroundOptions(
                 CommandParserOptions options,
-                [Frozen] CommandParseInfo parserRestrictions,
+                [Frozen] CommandParserRestrictions parserRestrictions,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
             )

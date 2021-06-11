@@ -16,7 +16,7 @@ namespace Brighid.Commands.Client.Parser
         private string currentArg = string.Empty;
         private string currentOptionName = string.Empty;
         private string currentOptionValue = string.Empty;
-        private CommandParseInfo? parserRestrictions;
+        private CommandParserRestrictions? parserRestrictions;
         private CommandParserState state;
 
         /// <summary>
