@@ -151,7 +151,7 @@ namespace Brighid.Commands.Client.Parser
             try
             {
                 var requestOptions = new ClientRequestOptions { ImpersonateUserId = options.ImpersonateUserId };
-                parserRestrictions = await commandsClient.GetCommandParseInfo(Result.Name, requestOptions, cancellationToken);
+                parserRestrictions = await commandsClient.GetCommandParserRestrictions(Result.Name, requestOptions, cancellationToken);
             }
             catch (ApiException)
             {
