@@ -1,4 +1,3 @@
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,25 +8,26 @@ using Microsoft.Extensions.Options;
 namespace Brighid.Commands.Client
 {
     /// <inheritdoc />
-    public partial class CommandsClient : ICommandsClient
+    public class DefaultBrighidCommandsService : IBrighidCommandsService
     {
+        private readonly ICommandsClient commandsClient;
         private readonly ICommandParser parser;
         private readonly CommandsClientOptions options;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandsClient" /> class.
+        /// Initializes a new instance of the <see cref="DefaultBrighidCommandsService" /> class.
         /// </summary>
-        /// <param name="httpClient">The HTTP Client to use for making API calls.</param>
-        /// <param name="parserFactory">Factory used to create parsers with.</param>
+        /// <param name="commandsClient">The HTTP Client to use for making API calls.</param>
+        /// <param name="parser">Used to parse commands with.</param>
         /// <param name="options">Options to use for the commands client.</param>
-        public CommandsClient(
-            HttpClient httpClient,
-            ICommandParserFactory parserFactory,
+        public DefaultBrighidCommandsService(
+            ICommandsClient commandsClient,
+            ICommandParser parser,
             IOptions<CommandsClientOptions> options
         )
-            : this(httpClient)
         {
-            parser = parserFactory.CreateParser(this);
+            this.commandsClient = commandsClient;
+            this.parser = parser;
             this.options = options.Value;
         }
 
@@ -50,7 +50,7 @@ namespace Brighid.Commands.Client
 
             var executeCommandOptions = new ClientRequestOptions { ImpersonateUserId = userId };
             var executeCommandRequest = new ExecuteCommandRequest { Options = command.Options, Arguments = command.Arguments };
-            return await ExecuteCommand(command!.Name, executeCommandRequest, executeCommandOptions, cancellationToken);
+            return await commandsClient.ExecuteCommand(command!.Name, executeCommandRequest, executeCommandOptions, cancellationToken);
         }
     }
 }

@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+
+using Brighid.Commands.Client.Parser;
 
 using FluentAssertions;
 
@@ -17,6 +20,7 @@ namespace Brighid.Commands.Client
         [Test, Auto]
         public void ShouldConfigureTheDefaultPrefix(
             char prefix,
+            Uri serviceUri,
             ServiceCollection services
         )
         {
@@ -24,10 +28,12 @@ namespace Brighid.Commands.Client
             .AddInMemoryCollection(new Dictionary<string, string>
             {
                 ["Commands:DefaultPrefix"] = $"{prefix}",
+                ["Commands:ServiceUri"] = serviceUri.ToString(),
             })
             .Build();
 
-            services.ConfigureBrighidCommands(options => configuration.Bind("Commands", options));
+            services.AddSingleton(configuration);
+            services.AddBrighidCommands(options => configuration.Bind("Commands", options));
             var provider = services.BuildServiceProvider();
             var options = provider.GetRequiredService<IOptions<CommandsClientOptions>>();
 
@@ -35,7 +41,7 @@ namespace Brighid.Commands.Client
         }
 
         [Test, Auto]
-        public void ShouldAddCommandParserFactorySingleton(
+        public void ShouldAddCommandParserSingleton(
             char prefix,
             ServiceCollection services
         )
@@ -47,12 +53,33 @@ namespace Brighid.Commands.Client
             })
             .Build();
 
-            services.ConfigureBrighidCommands(options => configuration.Bind("Commands", options));
+            services.AddBrighidCommands(options => configuration.Bind("Commands", options));
             var provider = services.BuildServiceProvider();
-            var parserFactory1 = provider.GetRequiredService<ICommandParserFactory>();
-            var parserFactory2 = provider.GetRequiredService<ICommandParserFactory>();
+            var parser1 = provider.GetRequiredService<ICommandParser>();
+            var parser2 = provider.GetRequiredService<ICommandParser>();
 
-            parserFactory1.Should().BeSameAs(parserFactory2);
+            parser1.Should().BeSameAs(parser2);
+        }
+
+        [Test, Auto]
+        public void ShouldAddCommandsClient(
+            char prefix,
+            ServiceCollection services
+        )
+        {
+            var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
+            {
+                ["Commands:DefaultPrefix"] = $"{prefix}",
+            })
+            .Build();
+
+            services.AddBrighidCommands(options => configuration.Bind("Commands", options));
+            services.UseBrighidCommands(new("http://localhost/"));
+            var provider = services.BuildServiceProvider();
+            var commandsClient = provider.GetRequiredService<IBrighidCommandsService>();
+
+            commandsClient.Should().NotBeNull();
         }
     }
 }

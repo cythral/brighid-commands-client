@@ -1,6 +1,9 @@
 using System;
 
 using Brighid.Commands.Client;
+using Brighid.Commands.Client.Parser;
+
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -14,10 +17,15 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services">The services to configure.</param>
         /// <param name="configure">The configuration delegate used to configure Brighid Commands.</param>
-        public static void ConfigureBrighidCommands(this IServiceCollection services, Action<CommandsClientOptions> configure)
+        public static void AddBrighidCommands(this IServiceCollection services, Action<CommandsClientOptions> configure)
         {
+            var options = new CommandsClientOptions();
+            configure(options);
+
             services.AddOptions<CommandsClientOptions>().Configure(configure);
-            services.AddSingleton<ICommandParserFactory, DefaultCommandParserFactory>();
+            services.TryAddSingleton<ICommandParser, DefaultCommandParser>();
+            services.TryAddSingleton<IBrighidCommandsService, DefaultBrighidCommandsService>();
+            services.UseBrighidCommands(options.ServiceUri);
         }
     }
 }

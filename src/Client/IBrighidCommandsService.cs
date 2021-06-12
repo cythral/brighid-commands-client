@@ -6,7 +6,7 @@ namespace Brighid.Commands.Client
     /// <summary>
     /// Client used to interact with the Commands Service API.
     /// </summary>
-    public partial interface ICommandsClient
+    public interface IBrighidCommandsService
     {
         /// <summary>
         /// Parses a command as a user with the given <paramref name="userId" />. (The user is impersonated by the client
