@@ -24,7 +24,7 @@ namespace Brighid.Commands.Client
             public async Task ShouldParseWithConfiguredDefaultPrefix(
                 string message,
                 string userId,
-                [Frozen] Command command,
+                [Frozen] Parser.Command command,
                 [Frozen] ICommandsClient commandsClient,
                 [Frozen] CommandsClientOptions options,
                 [Frozen, Substitute] ICommandParser parser,
