@@ -10,6 +10,45 @@
     }
   ],
   "paths": {
+    "/commands": {
+      "get": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "Commands:List",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Command"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Command"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Command"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/commands/{name}/parser-restrictions": {
       "get": {
         "tags": [
@@ -132,6 +171,64 @@
   },
   "components": {
     "schemas": {
+      "Command": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "$ref": "#/components/schemas/CommandType"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "requiredRole": {
+            "type": "string",
+            "nullable": true
+          },
+          "checksum": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "downloadURL": {
+            "type": "string",
+            "nullable": true
+          },
+          "assemblyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "isEnabled": {
+            "type": "boolean"
+          },
+          "argCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "validOptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "runner": {
+            "$ref": "#/components/schemas/ICommandRunner"
+          }
+        },
+        "additionalProperties": false
+      },
       "CommandParserRestrictions": {
         "type": "object",
         "properties": {
@@ -148,6 +245,13 @@
           }
         },
         "additionalProperties": false
+      },
+      "CommandType": {
+        "enum": [
+          0
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "ExecuteCommandRequest": {
         "type": "object",
@@ -178,6 +282,10 @@
             "type": "boolean"
           }
         },
+        "additionalProperties": false
+      },
+      "ICommandRunner": {
+        "type": "object",
         "additionalProperties": false
       }
     }
