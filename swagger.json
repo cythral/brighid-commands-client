@@ -96,6 +96,46 @@
         }
       }
     },
+    "/commands/{name}": {
+      "delete": {
+        "tags": [
+          "Command"
+        ],
+        "operationId": "Commands:DeleteCommand",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Command"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Command"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Command"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/commands/{name}/parser-restrictions": {
       "get": {
         "tags": [
