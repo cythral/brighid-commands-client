@@ -370,9 +370,6 @@
               "type": "string"
             },
             "nullable": true
-          },
-          "runner": {
-            "$ref": "#/components/schemas/ICommandRunner"
           }
         },
         "additionalProperties": false
@@ -441,9 +438,6 @@
               "type": "string"
             },
             "nullable": true
-          },
-          "runner": {
-            "$ref": "#/components/schemas/ICommandRunner"
           }
         },
         "additionalProperties": false
@@ -484,10 +478,6 @@
             "type": "boolean"
           }
         },
-        "additionalProperties": false
-      },
-      "ICommandRunner": {
-        "type": "object",
         "additionalProperties": false
       }
     }
