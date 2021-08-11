@@ -337,25 +337,12 @@
             "type": "string",
             "nullable": true
           },
-          "checksum": {
-            "type": "string",
-            "nullable": true
-          },
           "description": {
             "type": "string",
             "nullable": true
           },
-          "downloadURL": {
-            "type": "string",
-            "nullable": true
-          },
-          "assemblyName": {
-            "type": "string",
-            "nullable": true
-          },
-          "typeName": {
-            "type": "string",
-            "nullable": true
+          "embeddedLocation": {
+            "$ref": "#/components/schemas/EmbeddedCommandLocation"
           },
           "isEnabled": {
             "type": "boolean"
@@ -405,25 +392,12 @@
             "type": "string",
             "nullable": true
           },
-          "checksum": {
-            "type": "string",
-            "nullable": true
-          },
           "description": {
             "type": "string",
             "nullable": true
           },
-          "downloadURL": {
-            "type": "string",
-            "nullable": true
-          },
-          "assemblyName": {
-            "type": "string",
-            "nullable": true
-          },
-          "typeName": {
-            "type": "string",
-            "nullable": true
+          "embeddedLocation": {
+            "$ref": "#/components/schemas/EmbeddedCommandLocation"
           },
           "isEnabled": {
             "type": "boolean"
@@ -448,6 +422,28 @@
         ],
         "type": "integer",
         "format": "int32"
+      },
+      "EmbeddedCommandLocation": {
+        "type": "object",
+        "properties": {
+          "downloadURL": {
+            "type": "string",
+            "nullable": true
+          },
+          "assemblyName": {
+            "type": "string",
+            "nullable": true
+          },
+          "typeName": {
+            "type": "string",
+            "nullable": true
+          },
+          "checksum": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
       },
       "ExecuteCommandRequest": {
         "type": "object",
