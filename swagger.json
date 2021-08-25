@@ -422,11 +422,13 @@
         "properties": {
           "n": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "x-display-name": "Name"
           },
           "d": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "x-display-name": "Description"
           },
           "t": {
             "$ref": "#/components/schemas/CommandParameterType"
@@ -434,7 +436,8 @@
           "i": {
             "type": "integer",
             "format": "int32",
-            "nullable": true
+            "nullable": true,
+            "x-display-name": "ArgumentIndex"
           }
         },
         "additionalProperties": false
