@@ -11,12 +11,13 @@ namespace Brighid.Commands.Client.Parser
     internal class CommandParserStateMachine
     {
         private readonly List<string> arguments = new();
+        private readonly IDictionary<int, CommandParameter> validArguments = new Dictionary<int, CommandParameter>();
+        private readonly IDictionary<string, CommandParameter> validOptions = new Dictionary<string, CommandParameter>();
         private readonly CommandParserOptions options;
         private readonly ICommandsClient commandsClient;
         private string currentArg = string.Empty;
         private string currentOptionName = string.Empty;
         private string currentOptionValue = string.Empty;
-        private CommandParserRestrictions? parserRestrictions;
         private CommandParserState state;
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace Brighid.Commands.Client.Parser
 
             if (currentArg != string.Empty)
             {
-                if (arguments.Count >= parserRestrictions!.ArgCount)
+                if (arguments.Count >= validArguments.Count)
                 {
                     Success = false;
                 }
@@ -151,7 +152,18 @@ namespace Brighid.Commands.Client.Parser
             try
             {
                 var requestOptions = new ClientRequestOptions { ImpersonateUserId = options.ImpersonateUserId };
-                parserRestrictions = await commandsClient.GetCommandParserRestrictions(Result.Name, requestOptions, cancellationToken);
+                var parameters = await commandsClient.GetCommandParameters(Result.Name, requestOptions, cancellationToken);
+
+                foreach (var parameter in parameters)
+                {
+                    if (parameter.ArgumentIndex == null)
+                    {
+                        validOptions[parameter.Name] = parameter;
+                        continue;
+                    }
+
+                    validArguments[parameter.ArgumentIndex.Value] = parameter;
+                }
             }
             catch (ApiException)
             {
@@ -167,7 +179,7 @@ namespace Brighid.Commands.Client.Parser
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void HandleArgumentsState(char input)
         {
-            if (input == options.ArgSeparator && (parserRestrictions!.ArgCount == 0 || arguments.Count < parserRestrictions!.ArgCount - 1))
+            if (input == options.ArgSeparator && (validArguments.Count == 0 || arguments.Count < validArguments.Count - 1))
             {
                 if (currentArg != string.Empty)
                 {
@@ -206,7 +218,7 @@ namespace Brighid.Commands.Client.Parser
 
             if (input == ' ')
             {
-                if (!parserRestrictions!.ValidOptions.Contains(currentOptionName))
+                if (!validOptions.ContainsKey(currentOptionName))
                 {
                     Success = false;
                     state = CommandParserState.End;

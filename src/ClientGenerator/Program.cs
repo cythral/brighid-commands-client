@@ -80,6 +80,7 @@ namespace Brighid.Commands.ClientGenerator
                     TemplateDirectory = templateDirectory,
                     Namespace = "Brighid.Commands.Client",
                     JsonLibrary = CSharpJsonLibrary.SystemTextJson,
+                    PropertyNameGenerator = new PropertyNameGenerator(),
                 },
             };
 

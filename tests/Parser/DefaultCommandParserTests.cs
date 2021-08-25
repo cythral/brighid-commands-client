@@ -56,12 +56,18 @@ namespace Brighid.Commands.Client.Parser
             [Test, Auto]
             public async Task ShouldParseCommandNameWhenPrefixed(
                 CommandParserOptions options,
+                [Frozen] ICommandsClient commandsClient,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
             )
             {
                 options.Prefix = '.';
                 options.ArgSeparator = ' ';
+
+                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                {
+                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
+                });
 
                 var message = ".echo Hello World";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
@@ -80,24 +86,31 @@ namespace Brighid.Commands.Client.Parser
                 options.Prefix = '.';
                 options.ArgSeparator = ' ';
 
-                commandsClient.GetCommandParserRestrictions(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Throws(new ApiException(string.Empty, 404, string.Empty, null, null));
+                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Throws(new ApiException(string.Empty, 404, string.Empty, null, null));
 
                 var message = ".echo Hello World";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result.Should().BeNull();
-                await commandsClient.Received().GetCommandParserRestrictions(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+                await commandsClient.Received().GetCommandParameters(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
             }
 
             [Test, Auto]
             public async Task ShouldParseCommandArgumentsWhenPrefixed(
                 CommandParserOptions options,
+                [Frozen] ICommandsClient commandsClient,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
             )
             {
                 options.Prefix = '.';
                 options.ArgSeparator = ' ';
+
+                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                {
+                    new CommandParameter { Name = "string1", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "string2", ArgumentIndex = 1 },
+                });
 
                 var message = ".echo Hello World";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
@@ -125,14 +138,18 @@ namespace Brighid.Commands.Client.Parser
             [Test, Auto]
             public async Task ShouldCombineArgumentsIntoTheLastArgIfArgLimitIsReached(
                 CommandParserOptions options,
-                [Frozen] CommandParserRestrictions parserRestrictions,
+                [Frozen] ICommandsClient commandsClient,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
             )
             {
                 options.Prefix = '.';
                 options.ArgSeparator = ' ';
-                parserRestrictions.ArgCount = 1;
+
+                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                {
+                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
+                });
 
                 var message = ".echo This is a lot of arguments";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
@@ -144,7 +161,7 @@ namespace Brighid.Commands.Client.Parser
             [Test, Auto]
             public async Task ShouldParseOptions(
                 CommandParserOptions options,
-                [Frozen] CommandParserRestrictions parserRestrictions,
+                [Frozen] ICommandsClient commandsClient,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
             )
@@ -152,8 +169,13 @@ namespace Brighid.Commands.Client.Parser
                 options.Prefix = '.';
                 options.ArgSeparator = ' ';
                 options.OptionPrefix = "--";
-                parserRestrictions.ArgCount = 1;
-                parserRestrictions.ValidOptions = new[] { "hello", "foo" };
+
+                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                {
+                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "hello" },
+                    new CommandParameter { Name = "foo" },
+                });
 
                 var message = ".echo This is a lot of arguments --hello world --foo bar";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
@@ -167,7 +189,6 @@ namespace Brighid.Commands.Client.Parser
             [Test, Auto]
             public async Task ShouldReturnNullWhenOptionIsNotValid(
                 CommandParserOptions options,
-                [Frozen] CommandParserRestrictions parserRestrictions,
                 [Frozen, Substitute] ICommandsClient commandsClient,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
@@ -176,19 +197,24 @@ namespace Brighid.Commands.Client.Parser
                 options.Prefix = '.';
                 options.ArgSeparator = ' ';
                 options.OptionPrefix = "--";
-                parserRestrictions.ValidOptions = new[] { "foo" };
+
+                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                {
+                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "foo" },
+                });
 
                 var message = ".echo Hello World --bar foo";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result.Should().BeNull();
-                await commandsClient.Received().GetCommandParserRestrictions(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+                await commandsClient.Received().GetCommandParameters(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
             }
 
             [Test, Auto]
             public async Task ShouldReturnNullIfArgumentsExceedMaxArgsAroundOptions(
                 CommandParserOptions options,
-                [Frozen] CommandParserRestrictions parserRestrictions,
+                [Frozen] ICommandsClient commandsClient,
                 [Target] DefaultCommandParser parser,
                 CancellationToken cancellationToken
             )
@@ -196,7 +222,13 @@ namespace Brighid.Commands.Client.Parser
                 options.Prefix = '.';
                 options.ArgSeparator = ' ';
                 options.OptionPrefix = "--";
-                parserRestrictions.ArgCount = 1;
+
+                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                {
+                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "hello" },
+                    new CommandParameter { Name = "foo" },
+                });
 
                 var message = ".echo This is a lot of arguments --hello world --foo bar more arguments here";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
