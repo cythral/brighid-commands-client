@@ -28,13 +28,16 @@ function bump_version()
     echo $newVersionJsonContent > version.json
 
     touch .github/releases/v${nextVersion}.md
-    
+
     git add version.json .github/releases/v$nextVersion.md > /dev/null
     git commit -m "$nextVersion Release Prep" > /dev/null
+    gh auth login
+    gh pr create --title "v$nextVersion Release Prep" --body "- Bumps version to v$nextVersion\n- Adds release notes file"
+    gh pr merge --squash --auto --delete-branch
+    git checkout master
 }
 
 ensure_default_branch
-# create_release
+create_release
 bump_version
-gh auth login
-gh pr create
+
