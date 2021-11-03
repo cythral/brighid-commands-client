@@ -37,7 +37,7 @@ namespace Brighid.Commands.Client
                 await parser.Received().ParseCommand(Is(message), Is<CommandParserOptions>(parserOptions => parserOptions.Prefix == options.DefaultPrefix), Is(cancellationToken));
                 await commandsClient.Received().ExecuteCommand(
                     Is(command.Name),
-                    Is<ExecuteCommandRequest>(req => req.Options == command.Options && req.Arguments == command.Arguments),
+                    Is<ExecuteCommandRequest>(req => req.AdditionalProperties == command.Parameters),
                     Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == userId),
                     Is(cancellationToken)
                 );

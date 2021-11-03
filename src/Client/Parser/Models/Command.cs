@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Brighid.Commands.Client.Parser
@@ -14,13 +13,8 @@ namespace Brighid.Commands.Client.Parser
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets the command arguments.
-        /// </summary>
-        public string[] Arguments { get; set; } = Array.Empty<string>();
-
-        /// <summary>
         /// Gets or sets the command options.
         /// </summary>
-        public Dictionary<string, object> Options { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, object> Parameters { get; set; } = new Dictionary<string, object>();
     }
 }

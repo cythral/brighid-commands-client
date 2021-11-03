@@ -304,16 +304,6 @@
               "schema": {
                 "$ref": "#/components/schemas/ExecuteCommandRequest"
               }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExecuteCommandRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExecuteCommandRequest"
-              }
             }
           }
         },
@@ -542,22 +532,8 @@
         "additionalProperties": false
       },
       "ExecuteCommandRequest": {
-        "type": "object",
-        "properties": {
-          "arguments": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "nullable": true
-          },
-          "options": {
-            "type": "object",
-            "additionalProperties": { },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
+        "title": "ExecuteCommandRequest",
+        "type": "object"
       },
       "ExecuteCommandResponse": {
         "type": "object",
