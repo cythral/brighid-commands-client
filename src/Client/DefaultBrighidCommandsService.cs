@@ -49,7 +49,7 @@ namespace Brighid.Commands.Client
             }
 
             var executeCommandOptions = new ClientRequestOptions { ImpersonateUserId = userId };
-            var executeCommandRequest = new ExecuteCommandRequest { Options = command.Options, Arguments = command.Arguments };
+            var executeCommandRequest = new ExecuteCommandRequest { AdditionalProperties = command.Parameters };
             return await commandsClient.ExecuteCommand(command!.Name, executeCommandRequest, executeCommandOptions, cancellationToken);
         }
     }

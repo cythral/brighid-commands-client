@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -66,7 +65,7 @@ namespace Brighid.Commands.Client.Parser
 
                 commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
                 {
-                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "String", ArgumentIndex = 0 },
                 });
 
                 var message = ".echo Hello World";
@@ -108,14 +107,15 @@ namespace Brighid.Commands.Client.Parser
 
                 commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
                 {
-                    new CommandParameter { Name = "string1", ArgumentIndex = 0 },
-                    new CommandParameter { Name = "string2", ArgumentIndex = 1 },
+                    new CommandParameter { Name = "String1", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "String2", ArgumentIndex = 1 },
                 });
 
                 var message = ".echo Hello World";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
-                result!.Arguments.Should().BeEquivalentTo(new[] { "Hello", "World" });
+                result!.Parameters["String1"].Should().Be("Hello");
+                result!.Parameters["String2"].Should().Be("World");
             }
 
             [Test, Auto]
@@ -132,7 +132,7 @@ namespace Brighid.Commands.Client.Parser
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result!.Name.Should().Be("ping");
-                result!.Arguments.Should().BeEquivalentTo(Array.Empty<string>());
+                result!.Parameters.Should().BeEmpty();
             }
 
             [Test, Auto]
@@ -148,14 +148,14 @@ namespace Brighid.Commands.Client.Parser
 
                 commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
                 {
-                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "String", ArgumentIndex = 0 },
                 });
 
                 var message = ".echo This is a lot of arguments";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result!.Name.Should().Be("echo");
-                result!.Arguments.Should().BeEquivalentTo(new[] { "This is a lot of arguments" });
+                result!.Parameters["String"].Should().Be("This is a lot of arguments");
             }
 
             [Test, Auto]
@@ -172,18 +172,18 @@ namespace Brighid.Commands.Client.Parser
 
                 commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
                 {
-                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
-                    new CommandParameter { Name = "hello" },
-                    new CommandParameter { Name = "foo" },
+                    new CommandParameter { Name = "String", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "Hello" },
+                    new CommandParameter { Name = "Foo" },
                 });
 
                 var message = ".echo This is a lot of arguments --hello world --foo bar";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result.Should().NotBeNull();
-                result!.Arguments.Should().BeEquivalentTo(new[] { "This is a lot of arguments" });
-                result!.Options.Should().Contain("hello", "world");
-                result!.Options.Should().Contain("foo", "bar");
+                result!.Parameters["String"].Should().Be("This is a lot of arguments");
+                result!.Parameters["Hello"].Should().Be("world");
+                result!.Parameters["Foo"].Should().Be("bar");
             }
 
             [Test, Auto]
@@ -200,8 +200,8 @@ namespace Brighid.Commands.Client.Parser
 
                 commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
                 {
-                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
-                    new CommandParameter { Name = "foo" },
+                    new CommandParameter { Name = "String", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "Foo" },
                 });
 
                 var message = ".echo Hello World --bar foo";
@@ -225,9 +225,9 @@ namespace Brighid.Commands.Client.Parser
 
                 commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
                 {
-                    new CommandParameter { Name = "string", ArgumentIndex = 0 },
-                    new CommandParameter { Name = "hello" },
-                    new CommandParameter { Name = "foo" },
+                    new CommandParameter { Name = "String", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "Hello" },
+                    new CommandParameter { Name = "Foo" },
                 });
 
                 var message = ".echo This is a lot of arguments --hello world --foo bar more arguments here";

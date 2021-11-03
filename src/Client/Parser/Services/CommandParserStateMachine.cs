@@ -10,11 +10,13 @@ namespace Brighid.Commands.Client.Parser
     /// </summary>
     internal class CommandParserStateMachine
     {
-        private readonly List<string> arguments = new();
         private readonly IDictionary<int, CommandParameter> validArguments = new Dictionary<int, CommandParameter>();
         private readonly IDictionary<string, CommandParameter> validOptions = new Dictionary<string, CommandParameter>();
         private readonly CommandParserOptions options;
         private readonly ICommandsClient commandsClient;
+        private int currentArgIndex = 0;
+        private int argumentCount = 0;
+        private bool uppercaseNextParamChar = true;
         private string currentArg = string.Empty;
         private string currentOptionName = string.Empty;
         private string currentOptionValue = string.Empty;
@@ -74,13 +76,13 @@ namespace Brighid.Commands.Client.Parser
 
             if (currentArg != string.Empty)
             {
-                if (arguments.Count >= validArguments.Count)
+                if (argumentCount >= validArguments.Count)
                 {
                     Success = false;
                 }
                 else
                 {
-                    arguments.Add(currentArg);
+                    Result.Parameters.Add(validArguments[currentArgIndex].Name, currentArg);
                 }
             }
 
@@ -90,12 +92,7 @@ namespace Brighid.Commands.Client.Parser
                     ? currentOptionValue
                     : true;
 
-                Result.Options.Add(currentOptionName, value);
-            }
-
-            if (Success)
-            {
-                Result.Arguments = arguments.ToArray();
+                Result.Parameters.Add(currentOptionName, value);
             }
         }
 
@@ -179,11 +176,12 @@ namespace Brighid.Commands.Client.Parser
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void HandleArgumentsState(char input)
         {
-            if (input == options.ArgSeparator && (validArguments.Count == 0 || arguments.Count < validArguments.Count - 1))
+            if (input == options.ArgSeparator && (validArguments.Count == 0 || argumentCount < validArguments.Count - 1))
             {
                 if (currentArg != string.Empty)
                 {
-                    arguments.Add(currentArg);
+                    Result.Parameters.Add(validArguments[currentArgIndex++].Name, currentArg);
+                    argumentCount++;
                 }
 
                 currentArg = string.Empty;
@@ -216,6 +214,12 @@ namespace Brighid.Commands.Client.Parser
                 return;
             }
 
+            if (input == '-')
+            {
+                uppercaseNextParamChar = true;
+                return;
+            }
+
             if (input == ' ')
             {
                 if (!validOptions.ContainsKey(currentOptionName))
@@ -231,15 +235,19 @@ namespace Brighid.Commands.Client.Parser
 
                 if (arg != string.Empty)
                 {
-                    arguments.Add(arg);
+                    Result.Parameters.Add(validArguments[currentArgIndex++].Name, arg);
+                    argumentCount++;
                 }
 
                 currentArg = string.Empty;
                 state = CommandParserState.OptionValue;
+                uppercaseNextParamChar = true;
                 return;
             }
 
-            currentOptionName += input;
+            var normalizedInput = uppercaseNextParamChar ? char.ToUpper(input) : input;
+            currentOptionName += normalizedInput;
+            uppercaseNextParamChar = false;
         }
 
         /// <summary>
@@ -251,7 +259,7 @@ namespace Brighid.Commands.Client.Parser
         {
             if (input == ' ')
             {
-                Result.Options[currentOptionName] = currentOptionValue;
+                Result.Parameters[currentOptionName] = currentOptionValue;
                 state = CommandParserState.Arguments;
                 currentArg = string.Empty;
                 currentOptionName = string.Empty;
@@ -263,7 +271,7 @@ namespace Brighid.Commands.Client.Parser
 
             if (currentOptionValue == options.OptionPrefix)
             {
-                Result.Options[currentOptionName] = true;
+                Result.Parameters[currentOptionName] = true;
                 state = CommandParserState.Arguments;
                 currentArg = string.Empty;
                 currentOptionName = string.Empty;
