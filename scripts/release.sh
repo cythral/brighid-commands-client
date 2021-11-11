@@ -24,7 +24,7 @@ function bump_version()
     read -r nextVersion
     git checkout -b release-prep/v$nextVersion > /dev/null
 
-    newVersionJsonContent=$(cat version.json | jq ".version=\"$nextVersion\"")
+    newVersionJsonContent=$(cat version.json | jq ".version=\"$nextVersion\"" | jq .)
     echo $newVersionJsonContent > version.json
 
     touch .github/releases/v${nextVersion}.md
