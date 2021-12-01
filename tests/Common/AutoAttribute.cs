@@ -9,6 +9,8 @@ using AutoFixture;
 using AutoFixture.AutoNSubstitute;
 using AutoFixture.NUnit3;
 
+using Brighid.Commands.Client;
+
 using RichardSzalay.MockHttp;
 
 #pragma warning disable EF1001
@@ -27,6 +29,7 @@ internal class AutoAttribute : AutoDataAttribute
 
         var mockHttpHandler = new MockHttpMessageHandler();
         var httpClient = new HttpClient(mockHttpHandler) { BaseAddress = new("http://localhost/") };
+        fixture.Register<IBrighidCommandsCache>(() => new DefaultBrighidCommandsCache());
         fixture.Inject(mockHttpHandler);
         fixture.Inject(httpClient);
 

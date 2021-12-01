@@ -112,6 +112,56 @@ namespace Brighid.Commands.Client.Parser
                 });
 
                 var message = ".echo Hello World";
+                await parser.ParseCommand(message, options, cancellationToken);
+                await parser.ParseCommand(message, options, cancellationToken);
+
+                await commandsClient.Received(1).GetCommandParameters(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+            }
+
+            [Test, Auto]
+            public async Task ShouldRefetchParametersIfCacheWasCleared(
+                CommandParserOptions options,
+                [Frozen] IBrighidCommandsCache cache,
+                [Frozen] ICommandsClient commandsClient,
+                [Target] DefaultCommandParser parser,
+                CancellationToken cancellationToken
+            )
+            {
+                options.Prefix = '.';
+                options.ArgSeparator = ' ';
+
+                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                {
+                    new CommandParameter { Name = "String1", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "String2", ArgumentIndex = 1 },
+                });
+
+                var message = ".echo Hello World";
+                await parser.ParseCommand(message, options, cancellationToken);
+                cache.ClearParameters("echo");
+                await parser.ParseCommand(message, options, cancellationToken);
+
+                await commandsClient.Received(2).GetCommandParameters(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+            }
+
+            [Test, Auto]
+            public async Task ShouldCacheGetCommandParameterResponses(
+                CommandParserOptions options,
+                [Frozen] ICommandsClient commandsClient,
+                [Target] DefaultCommandParser parser,
+                CancellationToken cancellationToken
+            )
+            {
+                options.Prefix = '.';
+                options.ArgSeparator = ' ';
+
+                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                {
+                    new CommandParameter { Name = "String1", ArgumentIndex = 0 },
+                    new CommandParameter { Name = "String2", ArgumentIndex = 1 },
+                });
+
+                var message = ".echo Hello World";
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result!.Parameters["String1"].Should().Be("Hello");
