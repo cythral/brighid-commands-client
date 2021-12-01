@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Brighid.Commands.Client.Parser
 {
@@ -14,6 +17,7 @@ namespace Brighid.Commands.Client.Parser
         private readonly IDictionary<string, CommandParameter> validOptions = new Dictionary<string, CommandParameter>();
         private readonly CommandParserOptions options;
         private readonly ICommandsClient commandsClient;
+        private readonly IBrighidCommandsCache cache;
         private int currentArgIndex = 0;
         private int argumentCount = 0;
         private bool uppercaseNextParamChar = true;
@@ -26,13 +30,16 @@ namespace Brighid.Commands.Client.Parser
         /// Initializes a new instance of the <see cref="CommandParserStateMachine" /> class.
         /// </summary>
         /// <param name="commandsClient">Client to use for getting command parse info.</param>
+        /// <param name="cache">Cache for command parameter responses.</param>
         /// <param name="options">Options to use when parsing.</param>
         public CommandParserStateMachine(
             ICommandsClient commandsClient,
+            IBrighidCommandsCache cache,
             CommandParserOptions options
         )
         {
             this.commandsClient = commandsClient;
+            this.cache = cache;
             this.options = options;
         }
 
@@ -125,7 +132,7 @@ namespace Brighid.Commands.Client.Parser
             if (input == ' ')
             {
                 state = CommandParserState.Arguments;
-                await GetCommandParserRestrictions(cancellationToken);
+                await GetCommandParameters(cancellationToken);
                 return;
             }
 
@@ -144,12 +151,19 @@ namespace Brighid.Commands.Client.Parser
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The resulting task.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public async Task GetCommandParserRestrictions(CancellationToken cancellationToken)
+        public async Task GetCommandParameters(CancellationToken cancellationToken)
         {
             try
             {
-                var requestOptions = new ClientRequestOptions { ImpersonateUserId = options.ImpersonateUserId };
-                var parameters = await commandsClient.GetCommandParameters(Result.Name, requestOptions, cancellationToken);
+                var parameters = await cache.GetOrCreateAsync(Result.Name, async (entry) =>
+                {
+                    var requestOptions = new ClientRequestOptions { ImpersonateUserId = options.ImpersonateUserId };
+                    var response = await commandsClient.GetCommandParameters(Result.Name, requestOptions, cancellationToken);
+                    entry.SetPriority(CacheItemPriority.Normal);
+                    entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
+                    entry.SetSize(response.Count);
+                    return response;
+                });
 
                 foreach (var parameter in parameters)
                 {

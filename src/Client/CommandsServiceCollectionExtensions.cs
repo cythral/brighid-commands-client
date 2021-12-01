@@ -25,6 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddOptions<CommandsClientOptions>().Configure(configure);
             services.TryAddSingleton<ICommandParser, DefaultCommandParser>();
             services.TryAddSingleton<IBrighidCommandsService, DefaultBrighidCommandsService>();
+            services.TryAddSingleton<IBrighidCommandsCache, DefaultBrighidCommandsCache>();
             services.UseBrighidCommands(options.ServiceUri);
         }
     }
