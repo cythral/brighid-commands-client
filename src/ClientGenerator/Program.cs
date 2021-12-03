@@ -88,8 +88,8 @@ namespace Brighid.Commands.ClientGenerator
             var code = generator.GenerateFile();
             var extensions = GenerateServiceCollectionExtensions(code);
 
-            context.AddSource("GeneratedClientCode", code);
-            context.AddSource("GeneratedExtensions", extensions);
+            context.AddSource("GeneratedClientCode.g", code);
+            context.AddSource("GeneratedExtensions.g", extensions);
         }
 
         private string GenerateServiceCollectionExtensions(string code)
