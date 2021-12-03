@@ -1,7 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" InitialTargets="CleanResultsDirectory">
 
     <PropertyGroup>
         <IsPackable>false</IsPackable>
+        <RunSettingsFilePath>$(MSBuildProjectDirectory)/.runsettings</RunSettingsFilePath>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,4 +21,18 @@
     <ItemGroup>
         <ProjectReference Include="../src/Client/Client.csproj" />
     </ItemGroup>
+
+    <Target Name="CleanResultsDirectory">
+        <RemoveDir Directories="$(MSBuildThisFileDirectory)/../obj/Tests/IntermediateResults" />
+        <RemoveDir Directories="$(MSBuildThisFileDirectory)/../obj/Tests/Results" />
+    </Target>
+
+    <Target Name="CopyResults" AfterTargets="VSTest">
+        <ItemGroup>
+            <ResultFiles Include="$(MSBuildThisFileDirectory)/../obj/Tests/IntermediateResults/**/*.xml" />
+        </ItemGroup>
+
+        <MakeDir Directories="$(MSBuildThisFileDirectory)/../obj/Tests/Results" />
+        <Copy SourceFiles="@(ResultFiles)" DestinationFolder="$(MSBuildThisFileDirectory)/../obj/Tests/Results" />
+    </Target>
 </Project>
