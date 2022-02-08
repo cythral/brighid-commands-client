@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Brighid Commands",
-    "version": "1.0.53.23746"
+    "version": "1.0.54.48930"
   },
   "servers": [
     {
@@ -394,11 +394,10 @@
       },
       "CommandParameterType": {
         "enum": [
-          0,
-          1
+          "String",
+          "Number"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "CommandRequest": {
         "type": "object",
@@ -447,10 +446,9 @@
       },
       "CommandType": {
         "enum": [
-          0
+          "Embedded"
         ],
-        "type": "integer",
-        "format": "int32"
+        "type": "string"
       },
       "EmbeddedCommandLocation": {
         "type": "object",
