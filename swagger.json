@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Brighid Commands",
-    "version": "1.0.57.26586"
+    "version": "1.0.58.62354"
   },
   "servers": [
     {
@@ -394,10 +394,11 @@
       },
       "CommandParameterType": {
         "enum": [
-          "String",
-          "Number"
+          0,
+          1
         ],
-        "type": "string"
+        "type": "integer",
+        "format": "int32"
       },
       "CommandRequest": {
         "type": "object",
