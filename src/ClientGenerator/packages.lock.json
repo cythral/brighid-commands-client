@@ -42,12 +42,12 @@
       },
       "NSwag.CodeGeneration.CSharp": {
         "type": "Direct",
-        "requested": "[13.15.7, )",
-        "resolved": "13.15.7",
-        "contentHash": "p5VcGF/EB6DBf/R3y1ZlUv05Torxp7p41iQZPmVk60gA8B01SzJvqi+vZ43sSlVHzM//4pRx/KiohAy8SzGomQ==",
+        "requested": "[13.15.8, )",
+        "resolved": "13.15.8",
+        "contentHash": "jEqiBo6ebPk3rqP8NDeun0sjLcYt2OAJSPR/ntdc44u8V2/b7RNeDVj8CavDKXPhdbnYQGrkIsOPpTDzQ6rUeQ==",
         "dependencies": {
           "NJsonSchema.CodeGeneration.CSharp": "10.6.7",
-          "NSwag.CodeGeneration": "13.15.7"
+          "NSwag.CodeGeneration": "13.15.8"
         }
       },
       "StyleCop.Analyzers": {
@@ -330,19 +330,19 @@
       },
       "NSwag.CodeGeneration": {
         "type": "Transitive",
-        "resolved": "13.15.7",
-        "contentHash": "n5su0dFK+vczEpafjJT053nUQ8jLxk5pfCVYtWV2xxlRANJU/1T1wVjZd8sp5kUOBDXerGLL+2P/9gUeu7GJhQ==",
+        "resolved": "13.15.8",
+        "contentHash": "LbQ0Xlredr3QXQuBp5pLvOyrjaIutf4rYVj2fhnYgYKD8uctAh5CvVq664XUqcU0fUvcFEUg7ceVj8bCyYbuYg==",
         "dependencies": {
           "NJsonSchema": "10.6.7",
           "NJsonSchema.CodeGeneration": "10.6.7",
-          "NSwag.Core": "13.15.7",
+          "NSwag.Core": "13.15.8",
           "Newtonsoft.Json": "9.0.1"
         }
       },
       "NSwag.Core": {
         "type": "Transitive",
-        "resolved": "13.15.7",
-        "contentHash": "nwjuxy+3PHbKaOXvE6aPrD5N6dSz2l6qS+HaqGMyTeJzzppo0ZienkeYVpnSwDfim12R/eBLWVX39xBZ5ePGpQ==",
+        "resolved": "13.15.8",
+        "contentHash": "Z9OtUTVJCRzgqx6S6DW9orvgqqwSyxvSltPuk+GdFjbSpgxX9yNOd6wRch1et2xKBxGEhi8rdgc9i/NqcNfmGw==",
         "dependencies": {
           "NJsonSchema": "10.6.7",
           "Newtonsoft.Json": "9.0.1"
