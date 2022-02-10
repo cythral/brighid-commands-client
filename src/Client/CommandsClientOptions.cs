@@ -16,5 +16,10 @@ namespace Brighid.Commands.Client
         /// Gets or sets the Service URI where Brighid Commands Lives.
         /// </summary>
         public Uri ServiceUri { get; set; } = new Uri("https://commands.brigh.id");
+
+        /// <summary>
+        /// Gets or sets the name of the system this client is being used on (this gets sent as the x-source-system header).
+        /// </summary>
+        public string SystemName { get; set; } = string.Empty;
     }
 }
