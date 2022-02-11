@@ -205,6 +205,9 @@
                     request_.Headers.Add("x-impersonate-userId", options.ImpersonateUserId);
                     request_.Headers.Add("x-impersonate-audience", "commands.brigh.id");
                 }
+                
+                request_.Headers.Add("x-source-system", options.SourceSystem);
+                request_.Headers.Add("x-source-system-id", options.SourceSystemId);
 
 {%     for parameter in operation.HeaderParameters -%}
 {%         if parameter.IsRequired -%}

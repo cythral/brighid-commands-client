@@ -32,25 +32,31 @@ namespace Brighid.Commands.Client
         }
 
         /// <inheritdoc />
-        public async Task<ExecuteCommandResponse?> ParseAndExecuteCommandAsUser(string message, string userId, CancellationToken cancellationToken)
+        public async Task<ExecuteCommandResponse?> ParseAndExecuteCommandAsUser(
+            string message,
+            string userId,
+            string sourceSystemId,
+            CancellationToken cancellationToken
+        )
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var parserOptions = new CommandParserOptions
+            var requestOptions = new ClientRequestOptions
             {
-                Prefix = options.DefaultPrefix,
                 ImpersonateUserId = userId,
+                SourceSystem = options.SystemName,
+                SourceSystemId = sourceSystemId,
             };
 
+            var parserOptions = new CommandParserOptions { Prefix = options.DefaultPrefix, ClientRequestOptions = requestOptions };
             var command = await parser.ParseCommand(message, parserOptions, cancellationToken);
             if (command == null)
             {
                 return null;
             }
 
-            var executeCommandOptions = new ClientRequestOptions { ImpersonateUserId = userId };
             var executeCommandRequest = new ExecuteCommandRequest { AdditionalProperties = command.Parameters };
-            return await commandsClient.ExecuteCommand(command!.Name, executeCommandRequest, executeCommandOptions, cancellationToken);
+            return await commandsClient.ExecuteCommand(command.Name, executeCommandRequest, requestOptions, cancellationToken);
         }
     }
 }

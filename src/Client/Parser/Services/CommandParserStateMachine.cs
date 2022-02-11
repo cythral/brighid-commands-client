@@ -157,8 +157,7 @@ namespace Brighid.Commands.Client.Parser
             {
                 var parameters = await cache.GetOrCreateAsync(Result.Name, async (entry) =>
                 {
-                    var requestOptions = new ClientRequestOptions { ImpersonateUserId = options.ImpersonateUserId };
-                    var response = await commandsClient.GetCommandParameters(Result.Name, requestOptions, cancellationToken);
+                    var response = await commandsClient.GetCommandParameters(Result.Name, options.ClientRequestOptions, cancellationToken);
                     entry.SetPriority(CacheItemPriority.Normal);
                     entry.SetAbsoluteExpiration(TimeSpan.FromHours(1));
                     entry.SetSize(response.Count);
