@@ -91,7 +91,7 @@ namespace Brighid.Commands.Client.Parser
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result.Should().BeNull();
-                await commandsClient.Received().GetCommandParameters(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+                await commandsClient.Received().GetCommandParameters(Is("echo"), Is(options.ClientRequestOptions), Is(cancellationToken));
             }
 
             [Test, Auto]
@@ -115,7 +115,7 @@ namespace Brighid.Commands.Client.Parser
                 await parser.ParseCommand(message, options, cancellationToken);
                 await parser.ParseCommand(message, options, cancellationToken);
 
-                await commandsClient.Received(1).GetCommandParameters(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+                await commandsClient.Received(1).GetCommandParameters(Is("echo"), Is(options.ClientRequestOptions), Is(cancellationToken));
             }
 
             [Test, Auto]
@@ -141,7 +141,7 @@ namespace Brighid.Commands.Client.Parser
                 cache.ClearParameters("echo");
                 await parser.ParseCommand(message, options, cancellationToken);
 
-                await commandsClient.Received(2).GetCommandParameters(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+                await commandsClient.Received(2).GetCommandParameters(Is("echo"), Is(options.ClientRequestOptions), Is(cancellationToken));
             }
 
             [Test, Auto]
@@ -220,7 +220,7 @@ namespace Brighid.Commands.Client.Parser
                 options.ArgSeparator = ' ';
                 options.OptionPrefix = "--";
 
-                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                commandsClient.GetCommandParameters(Is("echo"), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
                 {
                     new CommandParameter { Name = "String", ArgumentIndex = 0 },
                     new CommandParameter { Name = "Hello" },
@@ -248,7 +248,7 @@ namespace Brighid.Commands.Client.Parser
                 options.ArgSeparator = ' ';
                 options.OptionPrefix = "--";
 
-                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                commandsClient.GetCommandParameters(Is("echo"), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
                 {
                     new CommandParameter { Name = "String", ArgumentIndex = 0 },
                     new CommandParameter { Name = "Foo" },
@@ -258,7 +258,7 @@ namespace Brighid.Commands.Client.Parser
                 var result = await parser.ParseCommand(message, options, cancellationToken);
 
                 result.Should().BeNull();
-                await commandsClient.Received().GetCommandParameters(Is("echo"), Is<ClientRequestOptions>(requestOptions => requestOptions.ImpersonateUserId == options.ImpersonateUserId), Is(cancellationToken));
+                await commandsClient.Received().GetCommandParameters(Is("echo"), Is(options.ClientRequestOptions), Is(cancellationToken));
             }
 
             [Test, Auto]
@@ -273,7 +273,7 @@ namespace Brighid.Commands.Client.Parser
                 options.ArgSeparator = ' ';
                 options.OptionPrefix = "--";
 
-                commandsClient.GetCommandParameters(Any<string>(), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
+                commandsClient.GetCommandParameters(Is("echo"), Any<ClientRequestOptions>(), Any<CancellationToken>()).Returns(new[]
                 {
                     new CommandParameter { Name = "String", ArgumentIndex = 0 },
                     new CommandParameter { Name = "Hello" },

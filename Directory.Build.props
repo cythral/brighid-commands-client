@@ -16,7 +16,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Configuration Condition="$(Configuration) == ''">Debug</Configuration>
     <Nullable>enable</Nullable>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>10</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>

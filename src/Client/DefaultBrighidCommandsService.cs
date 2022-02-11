@@ -41,14 +41,6 @@ namespace Brighid.Commands.Client
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var parserOptions = new CommandParserOptions { Prefix = options.DefaultPrefix, ImpersonateUserId = userId };
-            var command = await parser.ParseCommand(message, parserOptions, cancellationToken);
-            if (command == null)
-            {
-                return null;
-            }
-
-            var executeCommandRequest = new ExecuteCommandRequest { AdditionalProperties = command.Parameters };
             var requestOptions = new ClientRequestOptions
             {
                 ImpersonateUserId = userId,
@@ -56,7 +48,15 @@ namespace Brighid.Commands.Client
                 SourceSystemId = sourceSystemId,
             };
 
-            return await commandsClient.ExecuteCommand(command!.Name, executeCommandRequest, requestOptions, cancellationToken);
+            var parserOptions = new CommandParserOptions { Prefix = options.DefaultPrefix, ClientRequestOptions = requestOptions };
+            var command = await parser.ParseCommand(message, parserOptions, cancellationToken);
+            if (command == null)
+            {
+                return null;
+            }
+
+            var executeCommandRequest = new ExecuteCommandRequest { AdditionalProperties = command.Parameters };
+            return await commandsClient.ExecuteCommand(command.Name, executeCommandRequest, requestOptions, cancellationToken);
         }
     }
 }

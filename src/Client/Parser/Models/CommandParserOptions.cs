@@ -11,9 +11,9 @@ namespace Brighid.Commands.Client.Parser
         public char Prefix { get; set; } = '.';
 
         /// <summary>
-        /// Gets or sets the ID of the user to impersonate when fetching command info.
+        /// Gets or sets the options to use when making requests to the commands service.
         /// </summary>
-        public string ImpersonateUserId { get; set; } = string.Empty;
+        public ClientRequestOptions ClientRequestOptions { get; set; }
 
         /// <summary>
         /// Gets or sets the argument separator.
