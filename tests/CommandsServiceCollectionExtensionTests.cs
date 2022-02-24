@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Brighid.Commands.Client.Parser;
+using Brighid.Identity.Client;
 
 using FluentAssertions;
 
@@ -53,6 +54,7 @@ namespace Brighid.Commands.Client
             })
             .Build();
 
+            services.ConfigureBrighidIdentity<IdentityConfig>(configuration);
             services.AddBrighidCommands(options => configuration.Bind("Commands", options));
             var provider = services.BuildServiceProvider();
             var parser1 = provider.GetRequiredService<ICommandParser>();
@@ -74,6 +76,7 @@ namespace Brighid.Commands.Client
             })
             .Build();
 
+            services.ConfigureBrighidIdentity<IdentityConfig>(configuration);
             services.AddBrighidCommands(options => configuration.Bind("Commands", options));
             services.UseBrighidCommands(new("http://localhost/"));
             var provider = services.BuildServiceProvider();
