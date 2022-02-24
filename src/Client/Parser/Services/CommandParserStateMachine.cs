@@ -155,7 +155,7 @@ namespace Brighid.Commands.Client.Parser
         {
             try
             {
-                var parameters = await cache.GetOrCreateAsync(Result.Name, async (entry) =>
+                var parameters = await cache.GetOrCreateParametersAsync(Result.Name, async (entry) =>
                 {
                     var response = await commandsClient.GetCommandParameters(Result.Name, options.ClientRequestOptions, cancellationToken);
                     entry.SetPriority(CacheItemPriority.Normal);
