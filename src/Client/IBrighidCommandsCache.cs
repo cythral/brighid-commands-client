@@ -12,10 +12,22 @@ namespace Brighid.Commands.Client
     public interface IBrighidCommandsCache
     {
         /// <summary>
+        /// Clears out all cached parameters.
+        /// </summary>
+        void ClearAllParameters();
+
+        /// <summary>
         /// Clears out parameters cached for a specific command by name.
         /// </summary>
         /// <param name="name">The name of the command to clear out parameters for.</param>
         void ClearParameters(string name);
+
+        /// <summary>
+        /// Checks to see if a commands' parameters are cached or not.
+        /// </summary>
+        /// <param name="name">The name of the command to check if its parameters are cached.</param>
+        /// <returns>True if the parameters are cached, or false if not.</returns>
+        bool ParametersExist(string name);
 
         /// <summary>
         /// Gets cached command parameters or creates new ones.
@@ -23,6 +35,6 @@ namespace Brighid.Commands.Client
         /// <param name="name">The name of the command to cache parameters for.</param>
         /// <param name="factory">Factory for creating a new cache entry.</param>
         /// <returns>The resulting command parameters.</returns>
-        Task<ICollection<CommandParameter>> GetOrCreateAsync(string name, Func<ICacheEntry, Task<ICollection<CommandParameter>>> factory);
+        Task<ICollection<CommandParameter>> GetOrCreateParametersAsync(string name, Func<ICacheEntry, Task<ICollection<CommandParameter>>> factory);
     }
 }
