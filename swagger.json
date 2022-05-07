@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Brighid Commands",
-    "version": "1.0.157.38007"
+    "version": "1.0.158.30160"
   },
   "servers": [
     {
@@ -353,6 +353,13 @@
             },
             "nullable": true
           },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
           "isEnabled": {
             "type": "boolean"
           },
@@ -428,6 +435,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/CommandParameter"
+            },
+            "nullable": true
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
             },
             "nullable": true
           },
