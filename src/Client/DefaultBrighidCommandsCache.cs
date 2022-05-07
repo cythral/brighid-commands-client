@@ -49,7 +49,7 @@ namespace Brighid.Commands.Client
         public Task<ICollection<CommandParameter>> GetOrCreateParametersAsync(string name, Func<ICacheEntry, Task<ICollection<CommandParameter>>> factory)
         {
             var parameterKey = $"{ParametersPrefix}{Delimiter}{name}";
-            return (this as IMemoryCache).GetOrCreateAsync(parameterKey, (ICacheEntry entry) =>
+            return this.GetOrCreateAsync(parameterKey, (ICacheEntry entry) =>
             {
                 cachedParameters.Add(parameterKey);
                 entry.PostEvictionCallbacks.Add(evictionRegistration);
