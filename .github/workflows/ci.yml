@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - "master"
-    tags:
-      - "*"
   pull_request:
   schedule:
     - cron: "0 0 * * *"
@@ -22,34 +20,13 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
 
+    outputs:
+      version: ${{ steps.build.outputs.version }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - name: Get Commit Message
-        shell: bash
-        run: | # Account for pull request merge commits
-          sha=${{ github.sha }}
-          after=$(git rev-list origin/master..HEAD --max-parents=1 --max-count=1)
-          [ ! `git rev-list --no-walk --count --merges "$sha"` ] || sha=$after
-          echo "COMMIT_MESSAGE=$(git log --format=%B -n 1 $sha | tr '\n' ' ')" >> $GITHUB_ENV
-
-      - name: Set version
-        shell: bash
-        run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
-
-      - name: Display version
-        run: echo ${{ env.VERSION }}
-
-      - name: Check for Stale Version Number
-        if: ${{ !startsWith(github.ref , 'refs/tags/v') }}
-        shell: bash
-        run: |
-          lastTaggedVersion=$(git describe --abbrev=0 --tags --always)
-          lastTaggedVersionSha=$(git rev-list -n 1 $lastTaggedVersion)
-          if [ "$lastTaggedVersion" = "v$VERSION" ] && [ "$lastTaggedVersionSha" != "${{ github.sha }}" ]; then exit 1; fi
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v2
@@ -62,6 +39,7 @@ jobs:
 
       - name: Build
         shell: bash
+        id: build
         run: dotnet build --no-restore -m -bl:obj/logs/build-${{ matrix.os }}.binlog
 
       - name: Test
@@ -105,7 +83,7 @@ jobs:
               {
                 "title": "[${{ github.repository }}] Build Failed",
                 "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                "description": "An error occurred while building ${{ github.repository }} ${{ env.VERSION }} on ${{ matrix.os }}",
+                "description": "An error occurred while building ${{ github.repository }} ${{ steps.build.outputs.version }} on ${{ matrix.os }}",
                 "color": 12720135
               }
             ]
@@ -115,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Production
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -126,10 +104,6 @@ jobs:
         id: download-nugets
         with:
           name: nugets
-
-      - name: Set version
-        shell: bash
-        run: echo "VERSION=$(cat version.json | jq -r '.version')" >> $GITHUB_ENV
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v2
@@ -146,11 +120,11 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "${{ steps.download-nugets.outputs.download-path }}/*.nupkg,${{ steps.download-nugets.outputs.download-path }}/*.snupkg"
-          bodyFile: ".github/releases/v${{ env.VERSION }}.md"
-          tag: v${{ env.VERSION }}
+          generateReleaseNotes: true
+          tag: v${{ needs.build.outputs.version }}
           commit: ${{ github.sha }}
           token: ${{ secrets.GH_TOKEN }}
-          prerelease: ${{ contains(env.VERSION, '-') }}
+          prerelease: ${{ contains(needs.build.outputs.version, '-') }}
 
       - name: Discord Failure Notification
         uses: Ilshidur/action-discord@master
@@ -162,7 +136,7 @@ jobs:
               {
                 "title": "[${{ github.repository }}] Release Failed",
                 "url": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                "description": "An error occurred while releasing ${{ github.repository }} ${{ env.VERSION }}",
+                "description": "An error occurred while releasing ${{ github.repository }} ${{ needs.build.outputs.version }}",
                 "color": 12720135
               }
             ]
