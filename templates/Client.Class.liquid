@@ -200,6 +200,9 @@
             using (var request_ = new System.Net.Http.HttpRequestMessage())
 {%     endif -%}
             {
+                request_.Version = new System.Version(2, 0);
+                request_.VersionPolicy = System.Net.Http.HttpVersionPolicy.RequestVersionExact;
+                
                 if (options.ImpersonateUserId != null)
                 {
                     request_.Headers.Add("x-impersonate-userId", options.ImpersonateUserId);
