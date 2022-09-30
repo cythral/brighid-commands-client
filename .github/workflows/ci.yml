@@ -29,7 +29,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
 
       - name: Display .NET Info
         run: dotnet --info
@@ -106,7 +106,7 @@ jobs:
           name: nugets
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
 
       - name: Display .NET Info
         run: dotnet --info
