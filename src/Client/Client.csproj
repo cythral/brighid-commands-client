@@ -19,7 +19,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
-    <PackageReference Include="Brighid.Identity.Client" Version="0.6.4.6" />
+    <PackageReference Include="Brighid.Identity.Client" Version="0.7.0.3" />
   </ItemGroup>
 
   <ItemGroup>
