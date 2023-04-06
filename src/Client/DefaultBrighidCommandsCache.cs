@@ -46,18 +46,20 @@ namespace Brighid.Commands.Client
         }
 
         /// <inheritdoc />
-        public Task<ICollection<CommandParameter>> GetOrCreateParametersAsync(string name, Func<ICacheEntry, Task<ICollection<CommandParameter>>> factory)
+        public async Task<ICollection<CommandParameter>> GetOrCreateParametersAsync(string name, Func<ICacheEntry, Task<ICollection<CommandParameter>>> factory)
         {
             var parameterKey = $"{ParametersPrefix}{Delimiter}{name}";
-            return this.GetOrCreateAsync(parameterKey, (ICacheEntry entry) =>
+            var value = await this.GetOrCreateAsync(parameterKey, (ICacheEntry entry) =>
             {
                 cachedParameters.Add(parameterKey);
                 entry.PostEvictionCallbacks.Add(evictionRegistration);
                 return factory(entry);
             });
+
+            return value ?? throw new Exception("Could not retrieve parameter.");
         }
 
-        private void EvictionCallback(object key, object value, EvictionReason reason, object state)
+        private void EvictionCallback(object key, object? value, EvictionReason reason, object? state)
         {
             var keyString = (string)key;
             var prefix = keyString.Split(Delimiter)[0];

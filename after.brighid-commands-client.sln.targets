@@ -40,6 +40,9 @@
             <Output TaskParameter="ConsoleOutput" PropertyName="PackageVersion" />
         </Exec>
 
-        <Message Text="%0a::set-output name=version::$(PackageVersion)" Importance="High" />
+        <WriteLinesToFile
+            File="$(GITHUB_OUTPUT)"
+            Condition="'$(GITHUB_OUTPUT)' != '' and Exists('$(GITHUB_OUTPUT)')"
+            Lines="version=$(PackageVersion)" />
     </Target>
 </Project>
