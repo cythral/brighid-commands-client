@@ -26,7 +26,7 @@ namespace Brighid.Commands.Client
         )
         {
             var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>
+            .AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["Commands:DefaultPrefix"] = $"{prefix}",
                 ["Commands:ServiceUri"] = serviceUri.ToString(),
@@ -48,7 +48,7 @@ namespace Brighid.Commands.Client
         )
         {
             var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>
+            .AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["Commands:DefaultPrefix"] = $"{prefix}",
             })
@@ -70,7 +70,7 @@ namespace Brighid.Commands.Client
         )
         {
             var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string>
+            .AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["Commands:DefaultPrefix"] = $"{prefix}",
             })
