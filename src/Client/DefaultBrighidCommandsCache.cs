@@ -25,6 +25,9 @@ namespace Brighid.Commands.Client
         }
 
         /// <inheritdoc />
+        public int ParametersCacheCount => cachedParameters.Count;
+
+        /// <inheritdoc />
         public void ClearAllParameters()
         {
             foreach (var cachedParameter in cachedParameters.ToList())

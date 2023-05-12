@@ -12,6 +12,11 @@ namespace Brighid.Commands.Client
     public interface IBrighidCommandsCache
     {
         /// <summary>
+        /// Gets a value indicating the number of commands that have cached parameters.
+        /// </summary>
+        int ParametersCacheCount { get; }
+
+        /// <summary>
         /// Clears out all cached parameters.
         /// </summary>
         void ClearAllParameters();
