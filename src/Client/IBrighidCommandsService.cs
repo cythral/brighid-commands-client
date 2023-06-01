@@ -14,9 +14,10 @@ namespace Brighid.Commands.Client
         /// </summary>
         /// <param name="message">The message to parse a command from.</param>
         /// <param name="userId">ID of the user to impersonate.</param>
-        /// <param name="sourceSystemId">ID of the user in the source system that is executing the command.</param>
+        /// <param name="sourceSystemChannel">ID of the channel in the source system that is executing the command.</param>
+        /// <param name="sourceSystemUser">ID of the user in the source system that is executing the command.</param>
         /// <param name="cancellationToken">Token used to cancel the operation.</param>
         /// <returns>The resulting command, or null if there was an error.</returns>
-        Task<ExecuteCommandResponse?> ParseAndExecuteCommandAsUser(string message, string userId, string sourceSystemId, CancellationToken cancellationToken);
+        Task<ExecuteCommandResponse?> ParseAndExecuteCommandAsUser(string message, string userId, string sourceSystemChannel, string sourceSystemUser, CancellationToken cancellationToken);
     }
 }

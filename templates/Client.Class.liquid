@@ -210,7 +210,8 @@
                 }
                 
                 request_.Headers.Add("x-source-system", options.SourceSystem);
-                request_.Headers.Add("x-source-system-id", options.SourceSystemId);
+                request_.Headers.Add("x-source-system-channel", options.SourceSystemChannel);
+                request_.Headers.Add("x-source-system-user", options.SourceSystemUser);
 
 {%     for parameter in operation.HeaderParameters -%}
 {%         if parameter.IsRequired -%}

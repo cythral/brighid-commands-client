@@ -24,7 +24,8 @@ namespace Brighid.Commands.Client
             public async Task ShouldParseWithConfiguredDefaultPrefix(
                 string message,
                 string userId,
-                string sourceSystemId,
+                string sourceSystemChannel,
+                string sourceSystemUser,
                 [Frozen] Parser.Command command,
                 [Frozen] ICommandsClient commandsClient,
                 [Frozen] CommandsClientOptions options,
@@ -33,7 +34,7 @@ namespace Brighid.Commands.Client
                 CancellationToken cancellationToken
             )
             {
-                await client.ParseAndExecuteCommandAsUser(message, userId, sourceSystemId, cancellationToken);
+                await client.ParseAndExecuteCommandAsUser(message, userId, sourceSystemChannel, sourceSystemUser, cancellationToken);
 
                 await parser.Received().ParseCommand(Is(message), Is<CommandParserOptions>(parserOptions => parserOptions.Prefix == options.DefaultPrefix), Is(cancellationToken));
                 await commandsClient.Received().ExecuteCommand(
@@ -42,7 +43,8 @@ namespace Brighid.Commands.Client
                     Is<ClientRequestOptions>(requestOptions =>
                         requestOptions.ImpersonateUserId == userId &&
                         requestOptions.SourceSystem == options.SystemName &&
-                        requestOptions.SourceSystemId == sourceSystemId
+                        requestOptions.SourceSystemChannel == sourceSystemChannel &&
+                        requestOptions.SourceSystemUser == sourceSystemUser
                     ),
                     Is(cancellationToken)
                 );

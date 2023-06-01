@@ -35,7 +35,8 @@ namespace Brighid.Commands.Client
         public async Task<ExecuteCommandResponse?> ParseAndExecuteCommandAsUser(
             string message,
             string userId,
-            string sourceSystemId,
+            string sourceSystemChannel,
+            string sourceSystemUser,
             CancellationToken cancellationToken
         )
         {
@@ -45,7 +46,8 @@ namespace Brighid.Commands.Client
             {
                 ImpersonateUserId = userId,
                 SourceSystem = options.SystemName,
-                SourceSystemId = sourceSystemId,
+                SourceSystemChannel = sourceSystemChannel,
+                SourceSystemUser = sourceSystemUser,
             };
 
             var parserOptions = new CommandParserOptions { Prefix = options.DefaultPrefix, ClientRequestOptions = requestOptions };
