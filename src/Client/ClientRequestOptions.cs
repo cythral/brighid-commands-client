@@ -10,16 +10,19 @@ namespace Brighid.Commands.Client
         /// </summary>
         /// <param name="impersonateUserId">User id to impersonate for the request.</param>
         /// <param name="sourceSystem">Name of the source system the request came from.</param>
-        /// <param name="sourceSystemId">ID of the channel/sender the request came from.</param>
+        /// <param name="sourceSystemChannel">ID of the channel the request came from.</param>
+        /// <param name="sourceSystemUser">ID of the sender the request came from.</param>
         public ClientRequestOptions(
             string? impersonateUserId = null,
             string? sourceSystem = null,
-            string? sourceSystemId = null
+            string? sourceSystemChannel = null,
+            string? sourceSystemUser = null
         )
         {
             ImpersonateUserId = impersonateUserId;
             SourceSystem = sourceSystem ?? string.Empty;
-            SourceSystemId = sourceSystemId ?? string.Empty;
+            SourceSystemChannel = sourceSystemChannel ?? string.Empty;
+            SourceSystemUser = sourceSystemUser ?? string.Empty;
         }
 
         /// <summary>
@@ -33,8 +36,13 @@ namespace Brighid.Commands.Client
         public string SourceSystem { get; init; }
 
         /// <summary>
-        /// Gets the source system's id of the channel/sender who is making the request.
+        /// Gets the source system's id of the channel who is making the request.
         /// </summary>
-        public string SourceSystemId { get; init; }
+        public string SourceSystemChannel { get; init; }
+
+        /// <summary>
+        /// Gets the source system's id of the user who is making the request.
+        /// </summary>
+        public string SourceSystemUser { get; init; }
     }
 }
