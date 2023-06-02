@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Brighid Commands",
-    "version": "1.0.648.34986"
+    "version": "1.0.651.30532"
   },
   "servers": [
     {
@@ -256,6 +256,13 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "x-source-system-user",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
@@ -334,7 +341,14 @@
             }
           },
           {
-            "name": "x-source-system-id",
+            "name": "x-source-system-channel",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-source-system-user",
             "in": "header",
             "schema": {
               "type": "string"
