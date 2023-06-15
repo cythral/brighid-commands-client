@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Brighid Commands",
-    "version": "1.0.690.26330"
+    "version": "1.0.691.3014"
   },
   "servers": [
     {
