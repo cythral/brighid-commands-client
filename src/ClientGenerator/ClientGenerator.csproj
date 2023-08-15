@@ -9,7 +9,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis" Version="4.0.1" PrivateAssets="runtime;analyzers;contentfiles;build" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" PrivateAssets="runtime;analyzers;contentfiles;build" />
-        <PackageReference Include="NSwag.CodeGeneration.CSharp" Version="13.19.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
+        <PackageReference Include="NSwag.CodeGeneration.CSharp" Version="13.20.0" PrivateAssets="runtime;analyzers;contentfiles;build" />
     </ItemGroup>
 
     <ItemGroup>
